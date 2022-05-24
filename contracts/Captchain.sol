@@ -26,10 +26,12 @@ contract Captchain {
     bytes32 DOMAIN_SEPARATOR;
     address owner;
     address captchaGenerator;
+    bytes32 salt;
 
-    constructor (address _captchaGenerator) {
+    constructor (address _captchaGenerator, bytes32 _salt) {
         owner = msg.sender;
         captchaGenerator = _captchaGenerator;
+        salt = _salt;
 
         DOMAIN_SEPARATOR = hash(EIP712Domain({
             name: "Captcha",
@@ -69,7 +71,6 @@ contract Captchain {
 
     mapping(address => uint256) verified;
     mapping(bytes32 => bool) alreadyUsed;
-    bytes32 salt;
 
     modifier onlyOnwer() {
         require(msg.sender == owner, "Salt can only be set by owner");

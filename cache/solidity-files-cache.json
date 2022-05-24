@@ -1,0 +1,75 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/marcocastignoli/prj/solidity/captchain-ok/contracts/Captchain.sol": {
+      "lastModificationDate": 1653436454048,
+      "contentHash": "4319684799b62346376d7f89536590d1",
+      "sourceName": "contracts/Captchain.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.14"
+      ],
+      "artifacts": [
+        "Captchain"
+      ]
+    },
+    "/Users/marcocastignoli/prj/solidity/Captchain/contracts/Captchain.sol": {
+      "lastModificationDate": 1653436740614,
+      "contentHash": "4319684799b62346376d7f89536590d1",
+      "sourceName": "contracts/Captchain.sol",
+      "solcConfig": {
+        "version": "0.8.14",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.14"
+      ],
+      "artifacts": [
+        "Captchain"
+      ]
+    }
+  }
+}
