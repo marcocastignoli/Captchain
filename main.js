@@ -1,6 +1,6 @@
 const path = require("path")
 const fs = require("fs")
-const Captcha = require("@haileybot/captcha-generator")
+const Captcha = require("./captcha-generator")
 const piexif = require("piexifjs")
 const base64ImageToFile = require('base64image-to-file')
 

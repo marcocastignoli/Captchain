@@ -1,6 +1,6 @@
 "use strict";
 const Canvas = require("canvas");
-Canvas.registerFont(require("path").resolve(__dirname, "../assets/Swift.ttf"), {
+Canvas.registerFont(require("path").resolve(__dirname, "./assets/Swift.ttf"), {
     family: "swift"
 });
 const randomText = () => (Math.random()*100000000000000000).toString(10)
