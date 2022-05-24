@@ -63,11 +63,14 @@ contract Captchain {
     }
 
     mapping(address => uint256) verified;
+    mapping(bytes32 => bool) alreadyUsed;
 
     function captchaVerify(bytes calldata _response, Captcha calldata captcha, uint8 v, bytes32 r, bytes32 s) external returns (bool) {
-        require(verify(captcha, v, r, s), "Captcha is not valid");
+        require(!alreadyUsed[captcha.solution], "Captcha already used");
         require(captcha.solution == keccak256(_response), "Answer not valid");
+        require(verify(captcha, v, r, s), "Captcha is not valid");
         verified[msg.sender] = block.timestamp + captcha.duration;
+        alreadyUsed[captcha.solution] = true;
         return true;
     }
 
