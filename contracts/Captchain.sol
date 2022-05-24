@@ -24,8 +24,13 @@ contract Captchain {
     );
 
     bytes32 DOMAIN_SEPARATOR;
+    address owner;
+    address captchaGenerator;
 
-    constructor () {
+    constructor (address _captchaGenerator) {
+        owner = msg.sender;
+        captchaGenerator = _captchaGenerator;
+
         DOMAIN_SEPARATOR = hash(EIP712Domain({
             name: "Captcha",
             version: '1',
@@ -59,15 +64,29 @@ contract Captchain {
             DOMAIN_SEPARATOR,
             hash(captcha)
         ));
-        return ecrecover(digest, v, r, s) == 0x31C8289C9A31cA84c1B1BB4e222795b6ce9bB07c;
+        return ecrecover(digest, v, r, s) == captchaGenerator;
     }
 
     mapping(address => uint256) verified;
     mapping(bytes32 => bool) alreadyUsed;
+    bytes32 salt;
+
+    modifier onlyOnwer() {
+        require(msg.sender == owner, "Salt can only be set by owner");
+        _;
+    }
+
+    function setSalt(bytes32 _salt) onlyOnwer external {
+        salt = _salt;
+    }
+
+    function setGenerator(address _captchaGenerator) onlyOnwer external {
+        captchaGenerator = _captchaGenerator;
+    }
 
     function captchaVerify(bytes calldata _response, Captcha calldata captcha, uint8 v, bytes32 r, bytes32 s) external returns (bool) {
         require(!alreadyUsed[captcha.solution], "Captcha already used");
-        require(captcha.solution == keccak256(_response), "Answer not valid");
+        require(captcha.solution == keccak256(abi.encodePacked(_response, salt)), "Answer not valid");
         require(verify(captcha, v, r, s), "Captcha is not valid");
         verified[msg.sender] = block.timestamp + captcha.duration;
         alreadyUsed[captcha.solution] = true;
