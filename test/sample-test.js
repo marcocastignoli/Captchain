@@ -96,7 +96,7 @@ describe("Captchain", function () {
     // wait until the transaction is mined
     await captchaVerifyTx.wait();
 
-    expect(await captchain.isVerified(contractOwner.address)).to.be.true;
+    expect((await captchain.isVerified(contractOwner.address))[0]).to.be.true;
 
     const SafeContract = await ethers.getContractFactory("SafeContract");
     const safeContract = await SafeContract.deploy(captchain.address);

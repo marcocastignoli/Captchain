@@ -13,6 +13,7 @@
     "base64image-to-file": "^1.2.0",
     "canvas": "^2.9.1",
     "eip-712": "^1.0.0",
+    "hardhat-gas-reporter": "^1.0.8",
     "piexifjs": "^1.0.6"
   }
 }
