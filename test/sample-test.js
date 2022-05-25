@@ -100,5 +100,14 @@ describe("Captchain", function () {
     await captchaVerifyTx.wait();
 
     expect(await captchain.isVerified(contractOwner.address)).to.be.true;
+
+    const SafeContract = await ethers.getContractFactory("SafeContract");
+    const safeContract = await SafeContract.deploy(captchain.address);
+    await safeContract.deployed();
+
+    await safeContract.increment();
+
+    
+
   });
 });
