@@ -12,7 +12,7 @@ const { utils, Wallet } = ethers
 const { getMessage } = require("eip-712")
 
 describe("Captchain", function () {
-  it("Should return the new greeting once it's changed", async function () {
+  it("Should deploy captchain and test a captcha verification", async function () {
 
     const accounts = await ethers.getSigners()
     const contractOwner = accounts[0]
@@ -22,7 +22,6 @@ describe("Captchain", function () {
     const signingKey = new utils.SigningKey(privateKey);
 
     var wallet = new Wallet(privateKey);
-    console.log("Address: " + wallet.address);
 
     const salt = "0x0000000000000000000000000000000000000000000000000000000000000001"
     
@@ -31,7 +30,7 @@ describe("Captchain", function () {
     await captchain.deployed();
 
     let captcha = new Captcha();
-    //const jpegData = captcha.dataURL
+    const jpegData = captcha.dataURL
     const solution = "0x"+captcha.value.toString(16)
 
     // The typed data to sign
@@ -74,9 +73,7 @@ describe("Captchain", function () {
       signature: { r, s, v },
     }
 
-    console.log(userComment)
-
-    /* 
+//    console.log(userComment)
     
     const exifIfd = {}
     
@@ -92,7 +89,7 @@ describe("Captchain", function () {
         return console.error(err);
       }
     
-    }); */
+    });
 
     const captchaVerifyTx = await captchain.captchaVerify(solution, typedData.message, v, r, s);
 
@@ -107,7 +104,7 @@ describe("Captchain", function () {
 
     await safeContract.increment();
 
-    
+
 
   });
 });
