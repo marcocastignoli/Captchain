@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const path = require("path")
 const fs = require("fs")
-const Captcha = require("./captcha-generator")
+const Captcha = require("../libs/captcha-generator")
 const piexif = require("piexifjs")
 const base64ImageToFile = require('base64image-to-file')
 

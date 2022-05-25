@@ -94,8 +94,8 @@ contract Captchain {
         return true;
     }
 
-    function isVerified(address _address) external view returns (bool){
-        return block.timestamp <= verified[_address];
+    function isVerified(address _address) external view returns (bool, uint256, uint256){
+        return (block.timestamp <= verified[_address], block.timestamp, verified[_address]);
     }
     
 }
