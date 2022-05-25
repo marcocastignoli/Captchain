@@ -11,146 +11,17 @@
 </head>
 
 <body>
-    <div id="image"></div>
-    <input id="solution" />
-    <button onclick="sendCaptcha()">Send</button>
+    <div id="captchain"></div>
+    <script src="./captchain.js"></script>
     <script>
-        let captchain
-        let metadata
-        let signer
-        function getRandomCaptcha() {
-            return new Promise(async (resolve) => {
-
-                const captchaIndex = Math.floor(Math.random() * 10);
-                console.log(captchaIndex)
-                let res = await fetch(`./captchas/${captchaIndex}.jpeg`)
-                let blob = await res.blob()
-                var reader = new FileReader();
-                reader.onload = function () {
-                    var exifObj = piexif.load(this.result);
-                    resolve({ image: this.result, metadata: JSON.parse(exifObj.Exif[piexif.ExifIFD.UserComment]) })
-                };
-                reader.readAsDataURL(blob);
-            })
-        }
         async function init() {
-
-            const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-            // Prompt user for account connections
-            await provider.send("eth_requestAccounts", []);
-            signer = provider.getSigner();
-
-            const captchaRes = await getRandomCaptcha()
-
-            const image = captchaRes.image
-            metadata = captchaRes.metadata
-
-            var imageDom = new Image();
-            imageDom.src = image;
-            imageDom.width = 200;
-            document.querySelector('#image').append(imageDom)
-
-            let address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-            captchain = new ethers.Contract(address, [
-                {
-                    "inputs": [
-                        {
-                            "internalType": "bytes",
-                            "name": "_response",
-                            "type": "bytes"
-                        },
-                        {
-                            "components": [
-                                {
-                                    "internalType": "bytes32",
-                                    "name": "solution",
-                                    "type": "bytes32"
-                                },
-                                {
-                                    "internalType": "uint256",
-                                    "name": "duration",
-                                    "type": "uint256"
-                                }
-                            ],
-                            "internalType": "struct Captchain.Captcha",
-                            "name": "captcha",
-                            "type": "tuple"
-                        },
-                        {
-                            "internalType": "uint8",
-                            "name": "v",
-                            "type": "uint8"
-                        },
-                        {
-                            "internalType": "bytes32",
-                            "name": "r",
-                            "type": "bytes32"
-                        },
-                        {
-                            "internalType": "bytes32",
-                            "name": "s",
-                            "type": "bytes32"
-                        }
-                    ],
-                    "name": "captchaVerify",
-                    "outputs": [
-                        {
-                            "internalType": "bool",
-                            "name": "",
-                            "type": "bool"
-                        }
-                    ],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "_address",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "isVerified",
-                    "outputs": [
-                        {
-                            "internalType": "bool",
-                            "name": "",
-                            "type": "bool"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "stateMutability": "view",
-                    "type": "function"
-                },
-            ], signer)
-        }
-        async function sendCaptcha() {
-            let solutionDom = document.querySelector('#solution')
-            let solution = (parseInt(solutionDom.value)).toString(16)
-            if (solution.length % 2 != 0) {
-                solution = '0' + solution
-            }
-
-            console.log('0x' + solution, metadata.message, metadata.signature.v, metadata.signature.r, metadata.signature.s)
-            const captchaVerifyTx = await captchain.captchaVerify('0x' + solution, metadata.message, metadata.signature.v, metadata.signature.r, metadata.signature.s);
-            await captchaVerifyTx.wait()
-
-            let signerAddress = await signer.getAddress()
-            
-            let isVerified = await captchain.isVerified(signerAddress)
-            if (isVerified) {
-                console.log(isVerified, 'olè')
-            }
+            let captchain = new Captchain()
+            await captchain.load('#captchain')
+            captchain.addEventListener('onVerifyEnd', (e) => {
+                if (e.detail.success) {
+                    console.log('Verified: ', e.detail);
+                }
+            });
         }
         init()
     </script>
